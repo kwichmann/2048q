@@ -51,22 +51,51 @@ function setRandom() {
   setSquare(squareNumber, pot);
 }
 
-function combine(row) {
+// Function which takes an object with row and score as argument
+function combine(rowObject) {
+  // Extract variables from object
+  let row = rowObject["row"];
+  let score = rowObject["score"];
+
   if (row.length <= 1) {
-    return row;
+    return rowObject;
   }
   if (row.length == 2) {
     if (row[0] == row[1]) {
-      return [row[0] + 1];
+      return {
+        row: [row[0] + 1],
+        score: score + Math.pow(2, row[0] + 1),
+      };
     } else {
-      return row;
+      return rowObject;
     }
   }
-  let endCombined = combine(row.slice(-2));
-  if (endCombined.length == 1) {
-    return combine(row.slice(0, row.length - 2)).concat(endCombined);
+
+  // Recursion part
+  let end = {
+    row: row.slice(-2),
+    score: score,
+  };
+  let endCombined = combine(end);
+  let endRow = endCombined["row"];
+  let endScore = endCombined["score"];
+
+  if (endRow.length == 1) {
+    let pre = row.slice(0, row.length - 2);
+    let combined = combine({
+      row: pre,
+      score: endScore
+    });
+    combined["row"] = combined["row"].concat(endRow);
+    return combined;
   } else {
-    return combine(row.slice(0, row.length - 1)).concat(endCombined.slice(-1));
+    let pre = row.slice(0, row.length - 1);
+    let combined = combine({
+      row: pre,
+      score: endScore
+    });
+    combined["row"].push(endRow[1]);
+    return combined;
   }
 }
 
