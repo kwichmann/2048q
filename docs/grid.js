@@ -24,6 +24,13 @@ function setSquare(square, powerOfTwo) {
   powerGrid[square] = powerOfTwo;
 }
 
+// Set all squares according to powerGrid
+function setAllSquares() {
+  for (let i = 0; i < 16; i++) {
+    setSquare(i, powerGrid[i]);
+  }
+}
+
 function freeSquares() {
   let free = [];
   for (let i = 0; i < 16; i++) {
@@ -127,6 +134,15 @@ function moveRow(row) {
   return combined;
 }
 
+function compareGrids(a, b) {
+  for (let i = 0; i < 16; i++) {
+    if (a[i] != b[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
 function moveRight(g) {
   let newCombined = [
     moveRow([g[0], g[1], g[2], g[3]]),
@@ -134,13 +150,15 @@ function moveRight(g) {
     moveRow([g[8], g[9], g[10], g[11]]),
     moveRow([g[12], g[13], g[14], g[15]])
   ];
+  let newGrid = newCombined.reduce(function(gr, row) {
+    return gr.concat(row["row"]);
+  }, []);
   return {
-    grid: newCombined.reduce(function(g, row) {
-      return g.concat(row["row"]);
-    }, []),
+    grid: newGrid,
     score: newCombined.reduce(function(s, row) {
       return s + row["score"];
-    }, 0)
+    }, 0),
+    deadlock: compareGrids(g, newGrid)
   };
 }
 
