@@ -16,3 +16,9 @@ div div {
     text-align: center;
     line-height: 100px;
 }
+
+p {
+  margin: 20px;
+  text-align: center;
+  justify-content: center;
+}
