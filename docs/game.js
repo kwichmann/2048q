@@ -1,5 +1,6 @@
 let scoreDiv = document.getElementById("score");
 let score;
+let hiScore = 0;
 
 let moves;
 
@@ -100,7 +101,10 @@ function makeMove(m) {
 }
 
 function showScore() {
-  scoreDiv.innerHTML = "Score: " + score;
+  if (score > hiScore) {
+    hiScore = score;
+  }
+  scoreDiv.innerHTML = "Score: " + score + " Highscore: " + hiScore;
 }
 
 function showAgent() {
@@ -112,6 +116,6 @@ function checkGameOver() {
     return (t && c["deadlock"]);
   }, true);
   if (gameOver) {
-    scoreDiv.innerHTML = "Game Over. Final score: " + score;
+    scoreDiv.innerHTML = "Game Over. Final score: " + score + " Highscore: " + hiScore;
   }
 }
